@@ -1,30 +1,28 @@
 package examples
 
 import (
-	"log"
+	"encoding/json"
+	"fmt"
 
 	"github.com/dmytriiandriichuk/qson"
 )
 
-func Simple() {
+func Simple()  {
 	agg := qson.Aggregate(
 		qson.Match(
 			qson.Or(
-				qson.Same("user_id", "uuid_user_1"),
-				qson.Same("user_id", "uuid_user_2"),
+				qson.Eq("profession", "software engineer"),
+				qson.Eq("profession", "cool guy"),
 			),
 			qson.And(
-				qson.Or(
-					qson.Eq("profession", "software engineer"),
-					qson.Eq("profession", "cool guy"),
-				),
-				qson.Gte("amount", 24),
-				qson.Lte("amount", 42),
+				qson.Gte("experience", 24),
+				qson.Lte("experience", 42),
 				qson.Nin("status", []string{"active"}),
 			),
 			qson.Not(qson.Lte("age", 18)),
 		),
 	)
 
-	log.Printf("%+v", agg.Ensure(make(qson.M)))
+	j, _ := json.MarshalIndent(agg.Ensure(make(qson.M)), "", "	")
+	fmt.Printf("%s", string(j))
 }
