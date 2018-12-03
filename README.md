@@ -15,6 +15,7 @@ $ go get github.com/dmytriiandriichuk/qson
 A quick code example is shown below:
 
 ```go
+m := make(qson.M)
 agg := qson.Aggregate(
     qson.Match(
         qson.Or(
@@ -28,8 +29,8 @@ agg := qson.Aggregate(
         ),
         qson.Not(qson.Lte("age", 18)),
     ),
-)
-j, _ := json.MarshalIndent(agg.Ensure(make(qson.M)), "", "	")
+).Ensure(m)
+j, _ := json.MarshalIndent(m, "", "	")
 fmt.Printf("%s", string(j))
 // Output:
 // {
