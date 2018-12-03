@@ -1,3 +1,5 @@
+# WARNING: IN DEVELOPMENT
+
 # qson [![GoDoc](https://godoc.org/github.com/dmytriiandriichuk/qson?status.svg)](https://godoc.org/github.com/dmytriiandriichuk/qson)
 
 qson is a simple Go library for wrapping [MongoDB](https://docs.mongodb.com/) procedures 
