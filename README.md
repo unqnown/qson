@@ -1,6 +1,6 @@
 # WARNING: IN DEVELOPMENT
 
-# qson [![GoDoc](https://godoc.org/github.com/dmytriiandriichuk/qson?status.svg)](https://godoc.org/github.com/dmytriiandriichuk/qson) [![gocover.io](https://gocover.io/_badge/github.com/dmytriiandriichuk/qson)](https://gocover.io/github.com/dmytriiandriichuk/qson)
+# qson [![GoDoc](https://godoc.org/github.com/unqnown/qson?status.svg)](https://godoc.org/github.com/unqnown/qson) [![gocover.io](https://gocover.io/_badge/github.com/unqnown/qson)](https://gocover.io/github.com/unqnown/qson)
 
 
 qson is a simple Go library for wrapping [MongoDB](https://docs.mongodb.com/) procedures 
@@ -10,7 +10,7 @@ qson is a simple Go library for wrapping [MongoDB](https://docs.mongodb.com/) pr
 Standard `go get`:
 
 ```
-$ go get github.com/dmytriiandriichuk/qson
+$ go get github.com/unqnown/qson
 ```
 
 ## GOALS

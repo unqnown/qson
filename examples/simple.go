@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/dmytriiandriichuk/qson"
+	"github.com/unqnown/qson"
 )
 
 func Simple() {
