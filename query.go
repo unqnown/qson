@@ -8,7 +8,7 @@ type Query interface {
 // query is a general realization of Query operator.
 type query func(M) M
 
-func (q query) Ensure(m M) M   { return q(m) }
+func (q query) Ensure(m M) M   { return q(initializer().Ensure(m)) }
 func (q query) operatorProof() {}
 func (q query) queryProof()    {}
 
@@ -18,7 +18,7 @@ func (q query) queryProof()    {}
 func Queries(queries ...Query) query {
 	return query(func(m M) M {
 		for _, q := range queries {
-			q.Ensure(m)
+			m = q.Ensure(m)
 		}
 		return m
 	})

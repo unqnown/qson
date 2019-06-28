@@ -10,14 +10,49 @@ package qson
 // undefined ordered.
 type M = map[string]interface{}
 
+// MS is a convenient alias for a []map[string]interface{} slice of maps.
+type MS = []M
+
+// V is concise alias for interface{}, useful for dealing with long
+// functions and methods signature.
+type V = interface{}
+
 // Ensurer is a base interface which allows to impose mongo syntax requests.
 type Ensurer interface {
+	// TODO: Ensure(...M) M
 	Ensure(M) M
 }
 
 type ensurer func(M) M
 
-func (e ensurer) Ensure(m M) M { e(m); return m }
+func (e ensurer) Ensure(m M) M { return e(m) }
+
+func Raw(raw M) ensurer {
+	return Merge(
+		ensurer(func(m M) M {
+			for k, v := range raw {
+				m[k] = v
+			}
+			return m
+		}),
+	)
+}
+
+func intercept(ms ...M) M {
+	if len(ms) > 0 {
+		return ms[0]
+	}
+	return make(M)
+}
+
+func initializer() ensurer {
+	return ensurer(func(m M) M {
+		if m == nil {
+			return make(M)
+		}
+		return m
+	})
+}
 
 // Merge allow to combine several queries based on one field to one expression
 func Merge(ensurers ...Ensurer) ensurer {

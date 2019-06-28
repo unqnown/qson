@@ -7,9 +7,10 @@ import (
 	"github.com/dmytriiandriichuk/qson"
 )
 
-func Simple()  {
-	agg := qson.Aggregate(
-		qson.Match(
+func Simple() {
+	agg := qson.AGGREGATION
+	aggregation := agg.Aggregate(
+		agg.Match(
 			qson.Or(
 				qson.Eq("profession", "software engineer"),
 				qson.Eq("profession", "cool guy"),
@@ -23,6 +24,6 @@ func Simple()  {
 		),
 	)
 
-	j, _ := json.MarshalIndent(agg.Ensure(make(qson.M)), "", "	")
+	j, _ := json.MarshalIndent(aggregation, "", "	")
 	fmt.Printf("%s", string(j))
 }

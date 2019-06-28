@@ -29,7 +29,7 @@ func TestAggregation_Match(t *testing.T) {
 
 	for _, tc := range tt {
 		var actual = make(M)
-		Match(tc.query).Ensure(actual)
+		AGGREGATION.Match(tc.query).Ensure(actual)
 		assert.Equal(t, tc.expected, actual)
 	}
 }
@@ -38,28 +38,28 @@ func TestAggregation_Aggregate(t *testing.T) {
 	tt := []struct {
 		name     string
 		stages   []Stage
-		expected M
+		expected MS
 	}{
 		{
 			name: "match",
 			stages: []Stage{
-				Match(
+				AGGREGATION.Match(
 					In("status", []string{"active", "pending"}),
 					Same("user_id", "uuid_user"),
 				),
 			},
-			expected: M{
-				"$match": M{
-					"user_id": "uuid_user",
-					"status":  M{"$in": []string{"active", "pending"}},
+			expected: MS{
+				{
+					"$match": M{
+						"user_id": "uuid_user",
+						"status":  M{"$in": []string{"active", "pending"}},
+					},
 				},
 			},
 		},
 	}
 
 	for _, tc := range tt {
-		var actual = make(M)
-		Aggregate(tc.stages...).Ensure(actual)
-		assert.Equal(t, tc.expected, actual)
+		assert.Equal(t, tc.expected, AGGREGATION.Aggregate(tc.stages...))
 	}
 }

@@ -7,7 +7,7 @@ type LogicalQuery interface {
 
 type logicalQuery func(M) M
 
-func (q logicalQuery) Ensure(m M) M       { return q(m) }
+func (q logicalQuery) Ensure(m M) M       { return q(initializer().Ensure(m)) }
 func (q logicalQuery) operatorProof()     {}
 func (q logicalQuery) queryProof()        {}
 func (q logicalQuery) logicalQueryProof() {}
@@ -16,14 +16,9 @@ func (q logicalQuery) logicalQueryProof() {}
 // documents that match the conditions of both clauses.
 func And(queries ...Query) logicalQuery {
 	return logicalQuery(func(m M) M {
-		if m == nil {
-			return m
-		}
 		and := make([]M, len(queries))
 		for i, o := range queries {
-			sub := make(M)
-			o.Ensure(sub)
-			and[i] = sub
+			and[i] = o.Ensure(make(M))
 		}
 		m["$and"] = and
 		return m
@@ -34,12 +29,7 @@ func And(queries ...Query) logicalQuery {
 // documents that do not match the logicalQuery expression.
 func Not(q Query) logicalQuery {
 	return logicalQuery(func(m M) M {
-		if m == nil {
-			return m
-		}
-		exp := make(M)
-		q.Ensure(exp)
-		m["$not"] = exp
+		m["$not"] = q.Ensure(make(M))
 		return m
 	})
 }
@@ -48,14 +38,9 @@ func Not(q Query) logicalQuery {
 // documents that fail to match both clauses.
 func Nor(queries ...Query) logicalQuery {
 	return logicalQuery(func(m M) M {
-		if m == nil {
-			return m
-		}
 		nor := make([]M, len(queries))
 		for i, q := range queries {
-			sub := make(M)
-			q.Ensure(sub)
-			nor[i] = sub
+			nor[i] = q.Ensure(make(M))
 		}
 		m["$nor"] = nor
 		return m
@@ -66,16 +51,11 @@ func Nor(queries ...Query) logicalQuery {
 // documents that match the conditions of either clause.
 func Or(queries ...Query) logicalQuery {
 	return logicalQuery(func(m M) M {
-		if m == nil {
-			return m
-		}
-		and := make([]M, len(queries))
+		or := make([]M, len(queries))
 		for i, q := range queries {
-			sub := make(M)
-			q.Ensure(sub)
-			and[i] = sub
+			or[i] = q.Ensure(make(M))
 		}
-		m["$or"] = and
+		m["$or"] = or
 		return m
 	})
 }

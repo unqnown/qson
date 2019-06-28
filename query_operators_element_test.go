@@ -26,6 +26,13 @@ func TestQueryOperators_Element(t *testing.T) {
 				"user_id": M{"$type": []byte{0x02}},
 			},
 		},
+		{
+			name:  "regex",
+			query: Regex("user_id", "[A-Z]", "i", "m"),
+			expected: M{
+				"user_id": M{"$regex": "[A-Z]", "$options": "im"},
+			},
+		},
 	}
 
 	for _, tc := range tt {

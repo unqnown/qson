@@ -1,65 +1,42 @@
 package qson
 
-// TODO
+type aggregation string
 
-type Stage interface {
-	Ensurer
-	stageProof()
+// AGGREGATION is exported namespace which provides aggregation expressions.
+const AGGREGATION aggregation = "aggregation"
+
+// TODO: implement aggregator
+
+// There is no way to implement ensurer interface. Sorry
+// Aggregate allows to build aggregation pipeline.
+func (aggregation) Aggregate(stages ...Stage) (pipeline MS) {
+	pipeline = make(MS, len(stages))
+	for i, s := range stages {
+		pipeline[i] = s.Ensure(make(M))
+	}
+	return pipeline
 }
 
-type stage func(m M) M
+func Namespaces() (agg aggregation, prj project, grp group) { return AGGREGATION, PROJECT, GROUP }
 
-func (s stage) Ensure(m M) M { return s(m) }
-func (s stage) stageProof()  {}
+// A string that specifies the preferred number series to use to ensure
+// that the calculated boundary edges end on preferred round numbers or
+// their powers of 10.
+type Granularity = string
 
-type match func(m M) M
-
-func (s match) Ensure(m M) M { return s(m) }
-func (s match) stageProof()  {}
-
-func Match(queries ...Query) match {
-	return match(func(m M) M {
-		if m == nil {
-			return m
-		}
-		match := make(M)
-		for _, q := range queries {
-			q.Ensure(match)
-		}
-		m["$match"] = match
-		return m
-	})
-}
-
-type matcher struct{ queries []Query }
-
-func Matcher(queries ...Query) *matcher { return &matcher{queries: queries} }
-
-func (s *matcher) Ensure(m M) M { return Match(s.queries...).Ensure(m) }
-func (s *matcher) stageProof()  {}
-func (s *matcher) Match(queries ...Query) *matcher {
-	s.queries = append(s.queries, queries...)
-	return s
-}
-
-type Aggregation interface {
-	Ensurer
-	aggregationProof()
-}
-
-type aggregation func(M) M
-
-func (a aggregation) Ensure(m M) M      { return a(m) }
-func (a aggregation) aggregationProof() {}
-
-func Aggregate(stages ...Stage) aggregation {
-	return aggregation(func(m M) M {
-		if m == nil {
-			return m
-		}
-		for _, s := range stages {
-			s.Ensure(m)
-		}
-		return m
-	})
-}
+// Possible values of granularity
+const (
+	R5        Granularity = "R5"
+	R10       Granularity = "R10"
+	R20       Granularity = "R20"
+	R40       Granularity = "R40"
+	R80       Granularity = "R80"
+	_1_2_5    Granularity = "1-2-5"
+	E6        Granularity = "E6"
+	E12       Granularity = "E12"
+	E24       Granularity = "E24"
+	E48       Granularity = "E48"
+	E96       Granularity = "E96"
+	E192      Granularity = "E192"
+	POWERSOF2 Granularity = "POWERSOF2"
+)

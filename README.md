@@ -1,6 +1,7 @@
 # WARNING: IN DEVELOPMENT
 
-# qson [![GoDoc](https://godoc.org/github.com/dmytriiandriichuk/qson?status.svg)](https://godoc.org/github.com/dmytriiandriichuk/qson)
+# qson [![GoDoc](https://godoc.org/github.com/dmytriiandriichuk/qson?status.svg)](https://godoc.org/github.com/dmytriiandriichuk/qson) [![gocover.io](https://gocover.io/_badge/github.com/dmytriiandriichuk/qson)](https://gocover.io/github.com/dmytriiandriichuk/qson)
+
 
 qson is a simple Go library for wrapping [MongoDB](https://docs.mongodb.com/) procedures 
 
@@ -12,67 +13,59 @@ Standard `go get`:
 $ go get github.com/dmytriiandriichuk/qson
 ```
 
-## Usage & Example
+## GOALS
 
-A quick code example is shown below:
-
-```go
-m := make(qson.M)
-agg := qson.Aggregate(
-    qson.Match(
-        qson.Or(
-            qson.Eq("profession", "software engineer"),
-            qson.Eq("profession", "cool guy"),
-        ),
-        qson.And(
-            qson.Gte("experience", 24),
-            qson.Lte("experience", 42),
-            qson.Nin("status", []string{"active"}),
-        ),
-        qson.Not(qson.Lte("age", 18)),
-    ),
-).Ensure(m)
-j, _ := json.MarshalIndent(m, "", "	")
-fmt.Printf("%s", string(j))
-// Output:
-// {
-//    "$match": {
-//        "$and": [
-//            {
-//                "experience": {
-//                    "$gte": 24
-//                }
-//            },
-//            {
-//                "experience": {
-//                    "$lte": 42
-//                }
-//            },
-//            {
-//                "status": {
-//                    "$nin": [
-//                        "active"
-//                    ]
-//                }
-//            }
-//        ],
-//        "$not": {
-//            "age": {
-//                "$lte": 18
-//            }
-//        },
-//        "$or": [
-//            {
-//                "profession": {
-//                    "$eq": "software engineer"
-//                }
-//            },
-//            {
-//                "profession": {
-//                    "$eq": "cool guy"
-//                }
-//            }
-//        ]
-//    }
-//}
-```
+- Operators
+    - Query and Projection Operators
+        - [x] Comparison Query Operators
+            - [x] $eq
+            - [x] $gt
+            - [x] $gte
+            - [x] $in
+            - [x] $lt
+            - [x] $lte
+            - [x] $ne
+            - [x] $nin
+        - [x] Logical Query Operators
+            - [x] $and
+            - [x] $not
+            - [x] $nor
+            - [x] $or
+        - [x] Element Query Operators
+            - [x] $exists
+            - [x] $type
+        - [ ] Evaluation Query Operators
+            - [ ] $expr
+            - [ ] $jsonSchema
+            - [x] $mod
+            - [x] $regex
+            - [x] $text
+            - [ ] $where
+        - [ ] Geospatial Query Operators
+            - [ ] $geoIntersects
+            - [ ] $geoWithin
+            - [ ] $near
+            - [ ] $nearSphere
+            - [ ] $box
+            - [ ] $center
+            - [ ] $centerSphere
+            - [ ] $geometry
+            - [ ] $maxDistance
+            - [ ] $minDistance
+            - [ ] $polygon
+            - [ ] $uniqueDocs
+        - [ ] Array Query Operators
+            - [ ] $all
+            - [ ] $elemMatch
+            - [ ] $size
+        - [ ] Bitwise Query Operators
+            - [ ] $bitsAllClear
+            - [ ] $bitsAllSet
+            - [ ] $bitsAnyClear
+            - [ ] $bitsAnySet
+        - [ ] $comment
+        - [ ] Projection Operators
+            - [x] $ 
+            - [ ] $elemMatch 
+            - [ ] $meta 
+            - [ ] $slice 
